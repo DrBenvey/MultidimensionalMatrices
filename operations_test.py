@@ -34,7 +34,7 @@ class SpeedTest:
     def Testλμ_convolution_product_sequential_vs_parallel(self):
         λ=3;μ=5;n=2;ν=9
         print('λ=', λ,'μ=',μ,'n=',n,'ν=',ν, sep=' ')
-        l_indexes=np.arange(start=9, stop=17, step=1)
+        l_indexes=np.arange(start=7, stop=14, step=1)
         y_axis_parallel = [0] * len(l_indexes)
         y_axis_sequential = [0] * len(l_indexes)
         dim_b=λ+μ+ν
@@ -53,10 +53,14 @@ class SpeedTest:
             end_time = time.time()
             y_axis_sequential[i]=end_time - start_time
             print('k=',k,'dim_a=',dim_a,'time sequential (s): ',y_axis_sequential[i],sep=' ')
+            C1_not_np=C1.tolist()
+            C2_not_np=C2.tolist()
+            if C1_not_np!=C2_not_np:
+                print('ERROR dont match values')
         data = {'NumPy_parallel':y_axis_parallel,'NumPy_sequential':y_axis_sequential}
-        plt.plot(l_indexes,y_axis_parallel,color='r')
-        plt.scatter(l_indexes,y_axis_parallel,color='r')
+        plt.plot(l_indexes,y_axis_parallel,color='r',linestyle='-')
         plt.plot(l_indexes,y_axis_sequential,color='b',linestyle='--')
+        plt.scatter(l_indexes,y_axis_parallel,color='r')
         plt.scatter(l_indexes,y_axis_sequential,color='b')
         plt.legend(data, loc=2)
         plt.grid(True)
@@ -120,8 +124,12 @@ class Test:
 
     def Testλμ_convolution_product_sequential(self):
         C=operations.λμ_convolution_product_sequential(self.λ,self.μ,self.A,self.B)
-        print('Проверка', self.H==C, sep='\n')
+        H_list=self.H.tolist()
+        C_list=C.tolist()
+        print('Проверка', H_list==C_list, sep='\n')
   
     def Testλμ_convolution_product_parallel(self):
         C=operations.λμ_convolution_product_parallel(self.λ,self.μ,self.A,self.B)
-        print('Проверка', self.H==C, sep='\n')
+        H_list=self.H.tolist()
+        C_list=C.tolist()
+        print('Проверка', H_list==C_list, sep='\n')
